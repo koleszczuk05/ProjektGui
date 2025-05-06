@@ -1,12 +1,13 @@
 package ProjektGUI;
-
+// To wrzucić do pakietu z typami filmów.
+// Ta klasa się powinna nazywac Film.
 public abstract class Gatunek {
-    String tytul;
-    int nwm;
+    String title; // wszystko po angielsku
+    int nwm; // zmien ta nazwe 
     GENRE genre;
 
-    public Gatunek(String tytul, int nwm) {
-        this.tytul = tytul;
+    public Gatunek(String title, int nwm) {
+        this.title = title;
         this.nwm = nwm;
     }
 }
