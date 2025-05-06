@@ -1,3 +1,5 @@
+package ProjektGUI;
+
 public abstract class Gatunek {
     String tytul;
     int nwm;

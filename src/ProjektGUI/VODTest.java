@@ -1,5 +1,6 @@
-// import...
-import static GENRE.*;
+package ProjektGUI;// import...
+import static ProjektGUI.GENRE.*;
+import static ProjektGUI.Payform.*;
 public class VODTest {
 
     // cena programów danego gatunku z koszyka
@@ -13,33 +14,33 @@ public class VODTest {
         Pricelist cennik = Pricelist.getPricelist();
 
         // dodawanie nowych cen do cennika
-        cennik.add(MUSICAL, "Król lew", 12, 6, 3, 5); 	// metoda przyjmująca 6 parametrów
+        cennik.add(GENRE.MUSICAL, "Król lew", 12, 6, 3, 5); 	// metoda przyjmująca 6 parametrów
         // (kolejność, typy i oznaczenie parametrów są obowiązkowe, podane argumenty wywołania są przykładowe):
         // "próg" urządzeń: 3
         // jeśli klient ma abonament: 5 zł/urządzenie (z dowolną liczbą urządzeń)
         // jeśli klient nie ma abonamentu: do 3 urządzeń za 12 zł/urządzenie,
         // w przeciwnym przypadku (wpp.) 6 zł/urządzenie
 
-        cennik.add(DRAMA, "Król Lear", 15, 10, 2);	// metoda przyjmująca 5 parametrów
+        cennik.add(GENRE.DRAMA, "Król Lear", 15, 10, 2);	// metoda przyjmująca 5 parametrów
         // (kolejność, typy i oznaczenie parametrów są obowiązkowe, podane argumenty wywołania są przykładowe):
         // "próg" urządzeń: 2
         // niezależnie od tego, czy klient posiada abonament czy nie
         // do 2 urządzeń za 15 zł/urządzenie, wpp. 10 zł/urządzenie
 
-        cennik.add(COMEDY, "Królowa", 14, 7);		// metoda przyjmująca 4 parametry
+        cennik.add(GENRE.COMEDY, "Królowa", 14, 7);		// metoda przyjmująca 4 parametry
         // (kolejność, typy i oznaczenie parametrów są obowiązkowe, podane argumenty wywołania są przykładowe):
         // 7 zł/urządzenie jeśli klient ma abonament, wpp. 14 zł/urządzenie
 
 
-        cennik.add(COMEDY, "Król", 10, 5);
+        cennik.add(GENRE.COMEDY, "Król", 10, 5);
 
 
-        cennik.add(ACTION, "Król Artur");		// metoda przyjmująca 2 parametry
+        cennik.add(GENRE.ACTION, "Król Artur");		// metoda przyjmująca 2 parametry
         // (kolejność, typy i oznaczenie parametrów są obowiązkowe, podane argumenty wywołania są przykładowe):
         // darmowy dostęp
 
 
-        cennik.remove(COMEDY, "Król");			// metoda remove (do usunięcia ceny konkretnego programu) przyjmująca 2 parametry
+        cennik.remove(GENRE.COMEDY, "Król");			// metoda remove (do usunięcia ceny konkretnego programu) przyjmująca 2 parametry
 
 
         // Klient Kinoman deklaruje kwotę 60 zł na zamównienia; true oznacza, że klient posiada abonament w serwisie
@@ -74,7 +75,7 @@ public class VODTest {
         System.out.println("Po przepakowaniu, koszyk klienta " + koszykKinomana);
 
         // Ile wynosi cena wszystkich programów typu obyczajowego w koszyku klienta Kinoman
-        System.out.println("Progamy obyczajowe w koszyku klienta Kinoman kosztowały:  " + price(koszykKinomana, DRAMA));
+        System.out.println("Progamy obyczajowe w koszyku klienta Kinoman kosztowały:  " + price(koszykKinomana, GENRE.DRAMA));
 
         // Klient zapłaci...
         kinoman.pay(CARD, false);	// płaci kartą płatniczą, prowizja 1%
@@ -118,7 +119,7 @@ public class VODTest {
         // Co zostało w koszyku klienta Krytyk (za mało pieniędzy miał)
         System.out.println("Po zapłaceniu, koszyk klienta " + koszykKrytyka);
 
-        krytyk.returnVOD(COMEDY, "Królowa", 1);	// zwrot (do koszyka) 1 urządzenia programu komediowego "Królowa" z ostatniej transakcji
+        krytyk.returnVOD(GENRE.COMEDY, "Królowa", 1);	// zwrot (do koszyka) 1 urządzenia programu komediowego "Królowa" z ostatniej transakcji
 
         // Ile klientowi krytyk zostało pieniędzy?
         System.out.println("Po zwrocie, klientowi krytyk zostało: " + krytyk.getWallet() + " zł");

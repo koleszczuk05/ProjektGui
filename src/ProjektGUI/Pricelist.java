@@ -1,4 +1,4 @@
-//👿👿👿👿👿👿👿👿👿
+package ProjektGUI;//👿👿👿👿👿👿👿👿👿
 import java.util.HashMap;
 
 public class Pricelist {

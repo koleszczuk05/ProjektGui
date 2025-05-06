@@ -1,3 +1,5 @@
+package ProjektGUI;
+
 import java.util.LinkedList;
 
 public class Client {
@@ -76,7 +78,7 @@ public class Client {
         }
     }
 
-    void pay(String jakplaci,boolean autozwrot){
+    void pay(Payform jakplaci, boolean autozwrot){
 
     }
 
