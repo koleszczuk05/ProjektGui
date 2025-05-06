@@ -8,6 +8,7 @@ public class Client {
     boolean abonament;
     Wishlist wishlist;
     Basket basket;
+    double sumzakup=0;
 
 
     public Client(String name, double d, boolean abonament) {
@@ -72,9 +73,13 @@ public class Client {
         for(int i=0; i<produkts.size(); i++){
             if(produkts.get(i).price!=0){
                 basket.add(wishlist.remove(produkts.get(i)));
+                sumzakup+=produkts.get(i).price*produkts.get(i).ile;
             }
         }
     }
+
+    void pay()
+
 }
 class Wishlist{
     private LinkedList <Produkt> listazyczen;
