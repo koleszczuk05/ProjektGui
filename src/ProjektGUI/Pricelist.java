@@ -12,7 +12,7 @@ public class Pricelist {
         return price_list;
     }
 
-    private HashMap<PriceListKey,PriceListValue> pom;
+    private HashMap<PriceListKey,PriceListValue> pom= new HashMap<PriceListKey,PriceListValue>();
 
     PriceListValue getPriceListValue(PriceListKey key){
         return pom.get(key);

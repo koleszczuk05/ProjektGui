@@ -3,20 +3,21 @@ package ProjektGUI;
 import java.util.LinkedList;
 
 public class Client {
-    // To wszystko powinno byc prywatne.
     // Wszystko po angielsku.
     private String name;
-    double d; // zmien ta nazwe na cos co mowi co to jest
+    double balans; // zmien ta nazwe na cos co mowi co to jest
     private boolean abonament;
     private Wishlist wishlist;
     private Basket basket;
     private double sum_zakup=0;
 
 
-    public Client(String name, double d, boolean abonament) {
+    public Client(String name, double balans, boolean abonament) {
         this.name = name;
-        this.d = d;
+        this.balans = balans;
         this.abonament = abonament;
+        wishlist = new Wishlist();
+        basket = new Basket();
     }
 
     void add(Gatunek gatunek){
@@ -86,7 +87,41 @@ public class Client {
     }
 
     void pay(Payform jakplaci, boolean autozwrot){
+        if(jakplaci==Payform.CARD){
+            sum_zakup*=1.01;
+        }
+        if(sum_zakup>balans) {
+            if (!autozwrot) {
+                double temp = balans;
+                LinkedList<Produkt> products = basket.getKoszykowa_lista();
+                for (int i = 0; i < products.size(); i++) {
+                    Produkt product = products.get(i);
+                    if (product.price * product.ile <= temp) {
+                        temp -= product.price * product.ile;
+                    } else {
+                        for (int j = product.ile - 1; j >= 1; --j) {
+                            if (product.price * j <= temp) {
+                                temp -= product.price * j;
+                                products.get(i).ile = j;
+                                break;
+                            }
+                        }
+                    }
+                }
+                balans = temp;
+            }
+            else{
+                wishlist.clear();
+                basket.clear();
+            }
+        }
+        else{
+            balans -= sum_zakup;
+        }
+    }
 
+    double getWallet(){
+        return balans;
     }
 
 
@@ -112,6 +147,9 @@ class Wishlist{
     public LinkedList<Produkt> getListaZyczen() {
         return lista_zyczen;
     }
+    void clear(){
+        lista_zyczen.removeAll(lista_zyczen);
+    }
 }
 class Basket{
     private LinkedList <Produkt> koszykowa_lista;
@@ -130,7 +168,13 @@ class Basket{
         koszykowa_lista.add(produkt);
     }
 
+    public LinkedList<Produkt> getKoszykowa_lista() {
+        return koszykowa_lista;
+    }
 
+    void clear(){
+        koszykowa_lista.removeAll(koszykowa_lista);
+    }
 }
 class Produkt{
     GENRE genre;
