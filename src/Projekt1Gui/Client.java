@@ -68,15 +68,20 @@ public class Client {
     }
 
     void pack(){
-
+        LinkedList<Produkt> produkts = wishlist.getListazyczen();
+        for(int i=0; i<produkts.size(); i++){
+            if(produkts.get(i).price!=0){
+                basket.add(wishlist.remove(produkts.get(i)));
+            }
+        }
     }
 }
 class Wishlist{
     private LinkedList <Produkt> listazyczen;
     PriceList price_list = PriceList.getPricelist();
-    Produkt remove(Gatunek gatunek){
+    Produkt remove(Produkt produkt){
         for (int i = 0; i < listazyczen.size(); i++) {
-            if(listazyczen.get(i).tytul.equals(gatunek.tytul)){
+            if(listazyczen.get(i).tytul.equals(produkt.tytul)){
                 return listazyczen.remove(i);
             }
         }
@@ -85,9 +90,26 @@ class Wishlist{
     void add(Produkt produkt){
         listazyczen.add(produkt);
     }
+
+    public LinkedList<Produkt> getListazyczen() {
+        return listazyczen;
+    }
 }
 class Basket{
-    LinkedList <Gatunek> koszykowalista;
+    private LinkedList <Produkt> koszykowalista;
+    PriceList price_list = PriceList.getPricelist();
+    Produkt remove(Gatunek gatunek){
+        for (int i = 0; i < koszykowalista.size(); i++) {
+            if(koszykowalista.get(i).tytul.equals(gatunek.tytul)){
+                return koszykowalista.remove(i);
+            }
+        }
+        return null;
+    }
+    void add(Produkt produkt){
+        koszykowalista.add(produkt);
+    }
+
 
 }
 class Produkt{
