@@ -1,5 +1,6 @@
 package ProjektGUI;//👿👿👿👿👿👿👿👿👿
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Pricelist {
     private static Pricelist price_list = null;
@@ -13,6 +14,8 @@ public class Pricelist {
     }
 
     private HashMap<PriceListKey,PriceListValue> pom= new HashMap<PriceListKey,PriceListValue>();
+
+
 
     PriceListValue getPriceListValue(PriceListKey key){
         return pom.get(key);
@@ -69,5 +72,18 @@ class PriceListKey {
     public PriceListKey(GENRE genre, String title) {
         this.genre = genre;
         this.title = title;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PriceListKey that = (PriceListKey) o;
+        return genre == that.genre && Objects.equals(title, that.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(genre, title);
     }
 }

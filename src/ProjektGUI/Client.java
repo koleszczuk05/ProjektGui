@@ -1,10 +1,11 @@
 package ProjektGUI;
 
+import java.time.Period;
 import java.util.LinkedList;
 
 public class Client {
     // Wszystko po angielsku.
-    private String name;
+    public String name;
     double balans; // zmien ta nazwe na cos co mowi co to jest
     private boolean abonament;
     private Wishlist wishlist;
@@ -16,50 +17,54 @@ public class Client {
         this.name = name;
         this.balans = balans;
         this.abonament = abonament;
-        wishlist = new Wishlist();
-        basket = new Basket();
+        wishlist = new Wishlist(this);
+        basket = new Basket(this);
     }
 
     void add(Gatunek gatunek){
         Pricelist price_list = Pricelist.getPricelist();
         PriceListValue value = price_list.getPriceListValue(new PriceListKey(gatunek.genre, gatunek.title));
 
-        
+        if (value == null){
+            wishlist.add(new Produkt(gatunek.genre, gatunek.nwm,null, gatunek.title ));
+            return;
+        }
+
         // Moze da sie skrocic tą ifologie. Na koniec
         if(value.a==0 && value.b==0 && value.c==0 && value.d==0){
-            wishlist.add(new Produkt(gatunek.genre,gatunek.nwm,0,gatunek.title));
+            wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, (double) 0,gatunek.title));
         }
         else if(value.c==0 && value.d==0){
             if(abonament){
-                wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, value.b, gatunek.title));
+                wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, (double) value.b, gatunek.title));
             }
             else{
-                wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, value.a, gatunek.title));
+                wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, (double) value.a, gatunek.title));
             }
         }
         else if(value.d==0){
-            if(gatunek.nwm< value.c){
-                wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, value.b, gatunek.title));
+            if(gatunek.nwm > value.c){
+                wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, (double) value.b, gatunek.title));
             }
             else{
-                wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, value.a, gatunek.title));
+                wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, (double) value.a, gatunek.title));
             }
         }
         else{
-            if(gatunek.nwm< value.c){
+            if(gatunek.nwm > value.c){
                 if(abonament){
-                    wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, Math.min(value.b, value.d), gatunek.title));
+                    wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, (double) Math.min(value.b, value.d), gatunek.title));
                 }
                 else{
-                    wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, value.b, gatunek.title));
+                    wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, (double) value.b, gatunek.title));
                 }
             }
             else{
                 if(abonament){
-                    wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, value.d, gatunek.title));
+                    wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, (double) value.d, gatunek.title));
                 }
                 else{
-                    wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, value.a, gatunek.title));
+                    wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, (double) value.a, gatunek.title));
                 }
             }
         }
@@ -74,14 +79,14 @@ public class Client {
     }
 
     void pack(){
-        LinkedList<Produkt> products = wishlist.getListaZyczen();
-
-        for(int i=0; i<products.size(); i++){
-            // To jest kwadratowe, potencjalnie na koniec mozna pomyslec czego uzyc zamiast LinkedListy zeby bylo szybkie.
-            Produkt product = products.get(i);
-            if(product.price!=0){
-                basket.add(wishlist.remove(product));
-                sum_zakup+=product.price * product.ile; // sum_zakup po polsku
+        LinkedList<Produkt> products_copy = new LinkedList<>(wishlist.getListaZyczen());
+        for(Produkt product : products_copy){
+            if(product.price != null){
+                Produkt delete = wishlist.remove(product);
+                if(delete!=null){
+                    basket.add(delete);
+                    sum_zakup+=product.price*product.ile;
+                }
             }
         }
     }
@@ -129,11 +134,19 @@ public class Client {
 
 // Klasa Wishlist i Basket robia dokładnie to samo. To powinno być wydzielone do klasy abstrakcyjnej typu ProductList czy cos
 class Wishlist{
-    private LinkedList <Produkt> lista_zyczen; // snake case pls
+    Client client;
+    private LinkedList <Produkt> lista_zyczen = new LinkedList<Produkt>(); // snake case pls
     Pricelist price_list = Pricelist.getPricelist(); // to chyba nie jest tu potrzebne
+
+    Wishlist(Client client){
+        this.client = client;
+    }
+
+
     Produkt remove(Produkt produkt){
         for (int i = 0; i < lista_zyczen.size(); i++) {
-            if(lista_zyczen.get(i).tytul.equals(produkt.tytul)){
+            Produkt temp = lista_zyczen.get(i);
+            if(temp.tytul.equals(produkt.tytul) && produkt.genre==temp.genre){
                 return lista_zyczen.remove(i);
             }
         }
@@ -150,9 +163,24 @@ class Wishlist{
     void clear(){
         lista_zyczen.removeAll(lista_zyczen);
     }
+
+    @Override
+    public String toString() {
+        String temp= client.name  + "\n";
+        for(int i=0; i<lista_zyczen.size(); i++){
+            temp+=lista_zyczen.get(i).toString()+"\n";
+        }
+        return temp;
+    }
 }
 class Basket{
-    private LinkedList <Produkt> koszykowa_lista;
+    Client client;
+
+    public Basket(Client client) {
+        this.client = client;
+    }
+
+    private LinkedList <Produkt> koszykowa_lista = new LinkedList<Produkt>();
     Pricelist price_list = Pricelist.getPricelist(); // to chyba nie jest tu potrzebne
     
     Produkt remove(Gatunek gatunek){
@@ -175,17 +203,38 @@ class Basket{
     void clear(){
         koszykowa_lista.removeAll(koszykowa_lista);
     }
+    public String toString() {
+
+        String temp= client.name + "\n";
+        for(int i=0; i<koszykowa_lista.size(); i++){
+            temp+=koszykowa_lista.get(i).toString()+"\n";
+        }
+        return temp;
+    }
 }
 class Produkt{
     GENRE genre;
     String tytul; // po angielsku
     int ile;
-    double price;
+    Double price = null;
 
-    public Produkt(GENRE genre, int ile, double price, String tytul) {
+    public Produkt(GENRE genre, int ile, Double price, String tytul) {
         this.genre = genre;
         this.ile = ile;
         this.price = price;
         this.tytul = tytul;
+    }
+
+    @Override
+    public String toString() {
+        // Na koniec, użyj tu StringBuilderów
+        String ret = "";
+        switch (genre){
+            case DRAMA -> ret+=tytul + ", typ: obyczaj, ile: "+ ile + " urzadzenia, cena " + (price == null ? "brak" : price);
+            case ACTION -> ret+=tytul + ", typ: sensacja, ile: "+ ile + " urzadzenia, cena " + (price == null ? "brak" : price);
+            case MUSICAL -> ret+=tytul + ", typ: muzyczny, ile: "+ ile + " urzadzenia, cena " + (price == null ? "brak" : price);
+            case COMEDY ->  ret+=tytul + ", typ: komedia, ile: "+ ile + " urzadzenia, cena " + (price == null ? "brak" : price);
+        }
+        return ret;
     }
 }
