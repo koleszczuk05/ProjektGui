@@ -2,13 +2,13 @@ package Projekt1Gui;
 //👿👿👿👿👿👿👿👿👿
 import java.util.HashMap;
 
-public class PriceList {
-    private static PriceList price_list = null;
-    private PriceList(){}
+public class Pricelist {
+    private static Pricelist price_list = null;
+    private Pricelist(){}
 
-    public static PriceList getPricelist(){
+    public static Pricelist getPricelist(){
         if(price_list==null){
-            price_list = new PriceList();
+            price_list = new Pricelist();
         }
         return price_list;
     }
@@ -19,20 +19,20 @@ public class PriceList {
         return pom.get(key);
     }
 
-    void add(Genre G, String title, int a, int b, int c,int d ){
+    void add(GENRE G, String title, int a, int b, int c, int d ){
         pom.put(new PriceListKey(G,title),new PriceListValue(a,b,c,d));
     }
-    void add(Genre G, String title, int a, int b, int c){
+    void add(GENRE G, String title, int a, int b, int c){
         pom.put(new PriceListKey(G,title),new PriceListValue(a,b,c));
 
     }
-    void add(Genre G, String title, int a, int b){
+    void add(GENRE G, String title, int a, int b){
         pom.put(new PriceListKey(G,title),new PriceListValue(a,b));
     }
-    void add(Genre G, String title){
+    void add(GENRE G, String title){
         pom.put(new PriceListKey(G,title),new PriceListValue(0,0,0,0));
     }
-    void remove(Genre G, String title){
+    void remove(GENRE G, String title){
         pom.remove(new PriceListKey(G,title));
     }
 
@@ -64,10 +64,10 @@ class PriceListValue{
 }
 
 class PriceListKey {
-    Genre genre;
+    GENRE genre;
     String title;
 
-    public PriceListKey(Genre genre, String title) {
+    public PriceListKey(GENRE genre, String title) {
         this.genre = genre;
         this.title = title;
     }

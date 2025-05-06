@@ -1,7 +1,7 @@
 package Projekt1Gui;
 
 public class Drama extends Gatunek{
-    Genre genre=Genre.DRAMA;
+    GENRE genre= GENRE.DRAMA;
     public Drama(String tytul, int nwm) {
         super(tytul, nwm);
     }

@@ -18,7 +18,7 @@ public class Client {
     }
 
     void add(Gatunek gatunek){
-        PriceList price_list = PriceList.getPricelist();
+        Pricelist price_list = Pricelist.getPricelist();
         PriceListKey key = new PriceListKey(gatunek.genre, gatunek.tytul);
         PriceListValue value = price_list.getPriceListValue(key);
         if(value.a==0 && value.b==0 && value.c==0 && value.d==0){
@@ -78,12 +78,14 @@ public class Client {
         }
     }
 
-    void pay()
+    void pay(String jakplaci,boolean autozwrot){
+
+    }
 
 }
 class Wishlist{
     private LinkedList <Produkt> listazyczen;
-    PriceList price_list = PriceList.getPricelist();
+    Pricelist price_list = Pricelist.getPricelist();
     Produkt remove(Produkt produkt){
         for (int i = 0; i < listazyczen.size(); i++) {
             if(listazyczen.get(i).tytul.equals(produkt.tytul)){
@@ -102,7 +104,7 @@ class Wishlist{
 }
 class Basket{
     private LinkedList <Produkt> koszykowalista;
-    PriceList price_list = PriceList.getPricelist();
+    Pricelist price_list = Pricelist.getPricelist();
     Produkt remove(Gatunek gatunek){
         for (int i = 0; i < koszykowalista.size(); i++) {
             if(koszykowalista.get(i).tytul.equals(gatunek.tytul)){
@@ -118,12 +120,12 @@ class Basket{
 
 }
 class Produkt{
-    Genre genre;
+    GENRE genre;
     String tytul;
     int ile;
     double price;
 
-    public Produkt(Genre genre, int ile, double price, String tytul) {
+    public Produkt(GENRE genre, int ile, double price, String tytul) {
         this.genre = genre;
         this.ile = ile;
         this.price = price;

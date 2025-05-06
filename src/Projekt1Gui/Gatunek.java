@@ -3,7 +3,7 @@ package Projekt1Gui;
 public abstract class Gatunek {
     String tytul;
     int nwm;
-    Genre genre;
+    GENRE genre;
 
     public Gatunek(String tytul, int nwm) {
         this.tytul = tytul;

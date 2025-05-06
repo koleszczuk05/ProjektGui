@@ -1,7 +1,7 @@
 package Projekt1Gui;
 
 public class Action extends Gatunek{
-    Genre genre=Genre.ACTION;
+    GENRE genre= GENRE.ACTION;
     public Action(String tytul, int nwm) {
         super(tytul, nwm);
     }
