@@ -21,39 +21,39 @@ public class Client {
         PriceListKey key = new PriceListKey(gatunek.genre, gatunek.tytul);
         PriceListValue value = price_list.getPriceListValue(key);
         if(value.a==0 && value.b==0 && value.c==0 && value.d==0){
-            wishlist.listazyczen.add(new Produkt(gatunek.genre,gatunek.nwm,0,gatunek.tytul));
+            wishlist.add(new Produkt(gatunek.genre,gatunek.nwm,0,gatunek.tytul));
         }
         else if(value.c==0 && value.d==0){
             if(abonament){
-                wishlist.listazyczen.add(new Produkt(gatunek.genre,gatunek.nwm, value.b, gatunek.tytul));
+                wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, value.b, gatunek.tytul));
             }
             else{
-                wishlist.listazyczen.add(new Produkt(gatunek.genre,gatunek.nwm, value.a, gatunek.tytul));
+                wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, value.a, gatunek.tytul));
             }
         }
         else if(value.d==0){
             if(gatunek.nwm< value.c){
-                wishlist.listazyczen.add(new Produkt(gatunek.genre,gatunek.nwm, value.b, gatunek.tytul));
+                wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, value.b, gatunek.tytul));
             }
             else{
-                wishlist.listazyczen.add(new Produkt(gatunek.genre,gatunek.nwm, value.a, gatunek.tytul));
+                wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, value.a, gatunek.tytul));
             }
         }
         else{
             if(gatunek.nwm< value.c){
                 if(abonament){
-                    wishlist.listazyczen.add(new Produkt(gatunek.genre,gatunek.nwm, Math.min(value.b, value.d), gatunek.tytul));
+                    wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, Math.min(value.b, value.d), gatunek.tytul));
                 }
                 else{
-                    wishlist.listazyczen.add(new Produkt(gatunek.genre,gatunek.nwm, value.b, gatunek.tytul));
+                    wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, value.b, gatunek.tytul));
                 }
             }
             else{
                 if(abonament){
-                    wishlist.listazyczen.add(new Produkt(gatunek.genre,gatunek.nwm, value.d, gatunek.tytul));
+                    wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, value.d, gatunek.tytul));
                 }
                 else{
-                    wishlist.listazyczen.add(new Produkt(gatunek.genre,gatunek.nwm, value.a, gatunek.tytul));
+                    wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, value.a, gatunek.tytul));
                 }
             }
         }
@@ -81,6 +81,9 @@ class Wishlist{
             }
         }
         return null;
+    }
+    void add(Produkt produkt){
+        listazyczen.add(produkt);
     }
 }
 class Basket{
