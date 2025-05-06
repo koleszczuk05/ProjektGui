@@ -1,5 +1,3 @@
-package Projekt1Gui;
-
 public class Comedy extends Gatunek{
     GENRE genre= GENRE.COMEDY;
     public Comedy(String tytul, int nwm) {

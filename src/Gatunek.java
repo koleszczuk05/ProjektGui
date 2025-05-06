@@ -1,5 +1,3 @@
-package Projekt1Gui;
-
 public abstract class Gatunek {
     String tytul;
     int nwm;

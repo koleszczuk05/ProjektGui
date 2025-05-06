@@ -1,4 +1,3 @@
-package Projekt1Gui;
 //👿👿👿👿👿👿👿👿👿
 import java.util.HashMap;
 

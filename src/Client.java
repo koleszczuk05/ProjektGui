@@ -1,5 +1,3 @@
-package Projekt1Gui;
-
 import java.util.LinkedList;
 
 public class Client {

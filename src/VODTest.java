@@ -1,6 +1,5 @@
-package Projekt1Gui;
 // import...
-import static Projekt1Gui.GENRE.*;
+import static GENRE.*;
 public class VODTest {
 
     // cena programów danego gatunku z koszyka
