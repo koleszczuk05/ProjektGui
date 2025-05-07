@@ -1,12 +1,22 @@
 package ProjektGUI;// import...
+import java.util.LinkedList;
+
 import static ProjektGUI.GENRE.*;
 import static ProjektGUI.Payform.*;
 public class VODTest {
 
     // cena programów danego gatunku z koszyka
-    //static double price(Basket b, GENRE g) {
-        /*<- tu trzeba wpisać ciało metody */
-   // }
+    static double price(Basket b, GENRE g) {
+        LinkedList <Produkt> produkts = b.getKoszykowa_lista();
+        double cena = 0;
+        for (int i = 0; i < produkts.size(); i++) {
+            Produkt temp = produkts.get(i);
+            if(g== temp.genre){
+                cena+= temp.ile* temp.price;
+            }
+        }
+        return cena;
+    }
 
     public static void main(String[] args) {
 
@@ -75,7 +85,7 @@ public class VODTest {
         System.out.println("Po przepakowaniu, koszyk klienta " + koszykKinomana);
 
         // Ile wynosi cena wszystkich programów typu obyczajowego w koszyku klienta Kinoman
-        //System.out.println("Progamy obyczajowe w koszyku klienta Kinoman kosztowały:  " + price(koszykKinomana, DRAMA));
+        System.out.println("Progamy obyczajowe w koszyku klienta Kinoman kosztowały:  " + price(koszykKinomana, DRAMA));
 
         // Klient zapłaci...
         kinoman.pay(CARD, false);	// płaci kartą płatniczą, prowizja 1%
@@ -119,7 +129,7 @@ public class VODTest {
         // Co zostało w koszyku klienta Krytyk (za mało pieniędzy miał)
         System.out.println("Po zapłaceniu, koszyk klienta " + koszykKrytyka);
 
-        //krytyk.returnVOD(COMEDY, "Królowa", 1);	// zwrot (do koszyka) 1 urządzenia programu komediowego "Królowa" z ostatniej transakcji
+        krytyk.returnVOD(COMEDY, "Królowa", 1);	// zwrot (do koszyka) 1 urządzenia programu komediowego "Królowa" z ostatniej transakcji
 
         // Ile klientowi krytyk zostało pieniędzy?
         System.out.println("Po zwrocie, klientowi krytyk zostało: " + krytyk.getWallet() + " zł");

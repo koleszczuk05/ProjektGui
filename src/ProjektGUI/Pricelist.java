@@ -63,8 +63,45 @@ class PriceListValue{
         this.a = a;
         this.b = b;
     }
-    double getprice(int a, int b, int c, int d){
-        return a*b*c*d;
+    double getprice(int a, int b, int c, int d, Client client,int ilosc){
+        boolean czyabonament = client.isAbonament();
+        if(a==0 && b==0 && c==0 && d==0){
+            return (double) 0;
+        }
+        else if(c==0 && d==0){
+            if(czyabonament){
+                return  (double) b;
+            }
+            else{
+                return (double) a;
+            }
+        }
+        else if(d==0){
+            if(ilosc > c){
+                return  (double) b;
+            }
+            else{
+                return (double) a;
+            }
+        }
+        else{
+            if(ilosc > c){
+                if(czyabonament){
+                    return (double) Math.min(b, d);
+                }
+                else{
+                    return (double) b;
+                }
+            }
+            else{
+                if(czyabonament){
+                    return (double) d;
+                }
+                else{
+                    return (double) a;
+                }
+            }
+        }
     }
 }
 

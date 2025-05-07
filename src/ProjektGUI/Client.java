@@ -1,6 +1,5 @@
 package ProjektGUI;
 
-import java.time.Period;
 import java.util.LinkedList;
 
 public class Client {
@@ -19,6 +18,10 @@ public class Client {
         this.abonament = abonament;
         wishlist = new Wishlist(this);
         basket = new Basket(this);
+    }
+
+    public boolean isAbonament() {
+        return abonament;
     }
 
     void add(Gatunek gatunek){
@@ -71,6 +74,33 @@ public class Client {
         }
     }
 
+    void returnVOD(GENRE genre,String nazwa, int ilezwraca){
+        Pricelist price_list = Pricelist.getPricelist();
+        PriceListValue value = price_list.getPriceListValue(new PriceListKey(genre, nazwa));
+        LinkedList <Produkt> temp1 = basket.getKoszykowa_lista();
+        LinkedList <Produkt> temp2 = basket.getPozaplaceniu();
+        double cena=0;
+        for(int i = 0; i< temp1.size(); ++i){
+            Produkt akt = temp1.get(i);
+            if(genre==akt.genre && nazwa.equals(akt.tytul)){
+                double x=value.getprice(value.a, value.b, value.c, value.d, this,akt.ile) * akt.ile;
+                double y=value.getprice(value.a, value.b, value.c, value.d, this,ilezwraca);
+                cena= x-y;
+                balans+=cena;
+                for (int j = 0; j < temp2.size(); j++) {
+                    Produkt akt2 = temp2.get(j);
+                    if(genre==akt2.genre && nazwa.equals(akt2.tytul)){
+                        temp2.get(j).ile+=ilezwraca;
+                        return;
+                    }
+                }
+                temp2.add(new Produkt(akt.genre,ilezwraca,y,akt.tytul));
+                break;
+            }
+        }
+
+    }
+
     Wishlist getWishlist(){
         return wishlist;
     }
@@ -107,11 +137,15 @@ public class Client {
                         temp -= product.price * product.ile;
                     } else {
                         for (int j = product.ile - 1; j >= 1; --j) {
-                            if (product.price * j <= temp) {
-                                temp -= product.price * j;
+                            Pricelist price_list = Pricelist.getPricelist();
+                            PriceListValue value = price_list.getPriceListValue(new PriceListKey(product.genre, product.tytul));
+                            double akt = value.getprice(value.a, value.b, value.c, value.d, this,j);
+                            double cenacozostanie = value.getprice(value.a, value.b, value.c, value.d, this,i-j);
+                            if (akt * j <= temp) {
+                                temp -= akt * j;
+                                templist.add(new Produkt(product.genre,product.ile-j,cenacozostanie, product.tytul));
                                 products.get(i).ile = j;
-
-
+                                products.get(i).price=akt;
                                 break;
                             }
                         }
@@ -126,6 +160,7 @@ public class Client {
         wishlist.empty=true;
         basket.empty=true;
     }
+
 
     double getWallet(){
         return balans;
@@ -212,6 +247,12 @@ class Basket{
 
     public String toString() {
         String temp= client.name + "\n";
+        if(!pozaplaceniu.isEmpty()){
+            for(int i=0; i<pozaplaceniu.size(); i++){
+                temp+=pozaplaceniu.get(i).toString()+"\n";
+            }
+            return temp;
+        }
         if(empty){
             temp+=" --- pusto";
             return temp;
