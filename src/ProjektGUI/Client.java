@@ -31,6 +31,7 @@ public class Client {
         }
 
         // Moze da sie skrocic tą ifologie. Na koniec
+        //hhgh
         if(value.a==0 && value.b==0 && value.c==0 && value.d==0){
             wishlist.add(new Produkt(gatunek.genre,gatunek.nwm, (double) 0,gatunek.title));
         }
