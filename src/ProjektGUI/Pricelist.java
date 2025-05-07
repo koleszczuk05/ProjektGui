@@ -63,6 +63,9 @@ class PriceListValue{
         this.a = a;
         this.b = b;
     }
+    double getprice(int a, int b, int c, int d){
+        return a*b*c*d;
+    }
 }
 
 class PriceListKey {

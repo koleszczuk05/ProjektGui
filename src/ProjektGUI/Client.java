@@ -96,9 +96,10 @@ public class Client {
             sum_zakup*=1.01;
         }
         if(sum_zakup>balans) {
-            if (!autozwrot) {
+            if (autozwrot) {
                 double temp = balans;
                 LinkedList<Produkt> products = basket.getKoszykowa_lista();
+                LinkedList<Produkt> templist = basket.getPozaplaceniu();
                 for (int i = 0; i < products.size(); i++) {
                     Produkt product = products.get(i);
                     if (product.price * product.ile <= temp) {
@@ -108,6 +109,8 @@ public class Client {
                             if (product.price * j <= temp) {
                                 temp -= product.price * j;
                                 products.get(i).ile = j;
+
+
                                 break;
                             }
                         }
@@ -115,14 +118,12 @@ public class Client {
                 }
                 balans = temp;
             }
-            else{
-                wishlist.clear();
-                basket.clear();
-            }
         }
         else{
             balans -= sum_zakup;
         }
+        wishlist.empty=true;
+        basket.empty=true;
     }
 
     double getWallet(){
@@ -135,8 +136,9 @@ public class Client {
 // Klasa Wishlist i Basket robia dokładnie to samo. To powinno być wydzielone do klasy abstrakcyjnej typu ProductList czy cos
 class Wishlist{
     Client client;
+    boolean empty=false;
     private LinkedList <Produkt> lista_zyczen = new LinkedList<Produkt>(); // snake case pls
-    Pricelist price_list = Pricelist.getPricelist(); // to chyba nie jest tu potrzebne
+    //Pricelist price_list = Pricelist.getPricelist(); // to chyba nie jest tu potrzebne
 
     Wishlist(Client client){
         this.client = client;
@@ -160,13 +162,14 @@ class Wishlist{
     public LinkedList<Produkt> getListaZyczen() {
         return lista_zyczen;
     }
-    void clear(){
-        lista_zyczen.removeAll(lista_zyczen);
-    }
 
     @Override
     public String toString() {
         String temp= client.name  + "\n";
+        if(empty){
+            temp+=" --- pusto";
+            return temp;
+        }
         for(int i=0; i<lista_zyczen.size(); i++){
             temp+=lista_zyczen.get(i).toString()+"\n";
         }
@@ -175,14 +178,20 @@ class Wishlist{
 }
 class Basket{
     Client client;
-
+    boolean empty=false;
     public Basket(Client client) {
         this.client = client;
     }
 
     private LinkedList <Produkt> koszykowa_lista = new LinkedList<Produkt>();
-    Pricelist price_list = Pricelist.getPricelist(); // to chyba nie jest tu potrzebne
-    
+    private LinkedList <Produkt> pozaplaceniu = new LinkedList<Produkt>();
+    //Pricelist price_list = Pricelist.getPricelist(); // to chyba nie jest tu potrzebne
+
+
+    public LinkedList<Produkt> getPozaplaceniu() {
+        return pozaplaceniu;
+    }
+
     Produkt remove(Gatunek gatunek){
         for (int i = 0; i < koszykowa_lista.size(); i++) {
             if(koszykowa_lista.get(i).tytul.equals(gatunek.title)){
@@ -200,12 +209,12 @@ class Basket{
         return koszykowa_lista;
     }
 
-    void clear(){
-        koszykowa_lista.removeAll(koszykowa_lista);
-    }
     public String toString() {
-
         String temp= client.name + "\n";
+        if(empty){
+            temp+=" --- pusto";
+            return temp;
+        }
         for(int i=0; i<koszykowa_lista.size(); i++){
             temp+=koszykowa_lista.get(i).toString()+"\n";
         }
