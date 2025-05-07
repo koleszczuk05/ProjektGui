@@ -1,5 +1,5 @@
 package ProjektGUI;
 
 public enum GENRE {
-    MUSICAL,DRAMA,COMEDY,ACTION
+    MUSICAL, DRAMA, COMEDY, ACTION
 }
