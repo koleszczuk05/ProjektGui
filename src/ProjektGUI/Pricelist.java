@@ -1,14 +1,11 @@
-package ProjektGUI;//👿👿👿👿👿👿👿👿👿 // we to usuń xd
+package ProjektGUI;
 
 import java.util.HashMap;
 import java.util.Objects;
 
 public class Pricelist {
-    // Ogólnie ładnie jest jeżeli wszystkie atrybuty sa na górze
     private static Pricelist price_list = null;
-    private HashMap<PriceListKey, PriceListValue> pom = new HashMap<PriceListKey, PriceListValue>(); // Zmien nazwe pom
-                                                                                                     // na coś co mówi
-                                                                                                     // co to jest.
+    private HashMap<PriceListKey, PriceListValue> CennikFilmow = new HashMap<PriceListKey, PriceListValue>();
 
     private Pricelist() {
     }
@@ -21,82 +18,63 @@ public class Pricelist {
     }
 
     PriceListValue getPriceListValue(PriceListKey key) {
-        return pom.get(key);
+        return CennikFilmow.get(key);
     }
 
-    // Tu tak samo jak w konstruktorach PriceListValue mozna wywołac po prostu add z
-    // wieksza liczba parametrów jezeli jakis brakuje.
-    // Zmien te krypto nazwy G, a, b, c, d na cos to mowi co to jest. Co tego
-    // nazywanie zmiennych dużą literą to chyba też zły pomysł. Nazwałbym to po
-    // prostu `genre`.
-    void add(GENRE G, String title, int a, int b, int c, int d) {
-        pom.put(new PriceListKey(G, title), new PriceListValue(a, b, c, d));
+    void add(GENRE genre, String title, int a, int b, int c, int d) {
+        CennikFilmow.put(new PriceListKey(genre, title), new PriceListValue(a, b, c, d));
     }
 
-    void add(GENRE G, String title, int a, int b, int c) {
+    void add(GENRE genre, String title, int a, int b, int c) {
         // add(G, title, a, b, c, 0); // Na przykład tak zamiast tego co niżej
-        pom.put(new PriceListKey(G, title), new PriceListValue(a, b, c));
+        CennikFilmow.put(new PriceListKey(genre, title), new PriceListValue(a, b, c));
 
     }
 
-    void add(GENRE G, String title, int a, int b) {
-        pom.put(new PriceListKey(G, title), new PriceListValue(a, b));
+    void add(GENRE genre, String title, int a, int b) {
+        CennikFilmow.put(new PriceListKey(genre, title), new PriceListValue(a, b));
     }
 
-    void add(GENRE G, String title) {
-        pom.put(new PriceListKey(G, title), new PriceListValue(0, 0, 0, 0));
+    void add(GENRE genre, String title) {
+        CennikFilmow.put(new PriceListKey(genre, title), new PriceListValue(0, 0, 0, 0));
     }
 
-    void remove(GENRE G, String title) {
-        pom.remove(new PriceListKey(G, title));
+    void remove(GENRE genre, String title) {
+        CennikFilmow.remove(new PriceListKey(genre, title));
     }
 
 }
 
 class PriceListValue {
-    // Moim zdaniem niektóre z tych rzeczy powinny być dużymi Doublami. W szczególności
-    // cena którąkolwiek literką ona jest. Nie musiałbyś castować wszystkiego w
-    // Client.
-    int a = 0; // Koniecznie zmień te nazwy na coś co mówi czym one są, bo za chuja nie
-               // wiadomo.
-    int b = 0;
-    int c = 0;
-    int d = 0;
 
-    // Tutaj moim zdaniem fajniej by było używać tylko tego konstruktora z 4
-    // parametrami a w innych konstruktorach używać go i przekazać mu domyślne
-    // parametry.
-    public PriceListValue(int a, int b, int c, int d) {
-        this.a = a;
-        this.b = b;
-        this.c = c;
-        this.d = d;
+    int brak_abonamentu_mniej_prog = 0;
+    int brak_abonamentu_wiecej_prog = 0;
+    int prog_urzadzen = 0;
+    int ma_abonament = 0;
+
+    public PriceListValue(int brak_abonamentu_mniej_prog, int brak_abonamentu_wiecej_prog, int prog_urzadzen, int ma_abonament) {
+        this.brak_abonamentu_mniej_prog = brak_abonamentu_mniej_prog;
+        this.brak_abonamentu_wiecej_prog = brak_abonamentu_wiecej_prog;
+        this.prog_urzadzen = prog_urzadzen;
+        this.ma_abonament = ma_abonament;
     }
 
-    public PriceListValue(int a, int b, int c) {
-        this(a, b, c, 0); // O tak, zamiast powtarzać kod. Wtedy wywołujesz istniejący konstruktor z
-                          // wieksza liczba argumentów.
-        // this.a = a;
-        // this.b = b;
-        // this.c = c;
+    public PriceListValue(int brak_abonamentu_mniej_prog, int brak_abonamentu_wiecej_prog, int prog_urzadzen) {
+        this(brak_abonamentu_mniej_prog, brak_abonamentu_wiecej_prog, prog_urzadzen, 0);
     }
 
-    public PriceListValue(int a, int b) {
-        this(a, b, 0, 0);
-
-        // this.a = a;
-        // this.b = b;
+    public PriceListValue(int brak_abonamentu_mniej_prog, int brak_abonamentu_wiecej_prog) {
+        this(brak_abonamentu_mniej_prog, brak_abonamentu_wiecej_prog, 0, 0);
     }
 
-    double getprice(int a, int b, int c, int d, Client client, int ilosc) { // Nazwy metod camelCasem -> getprice ->
-                                                                            // getPrice.
-        boolean czyabonament = client.isAbonament(); // Nazwy zmiennych snake_casem -> czyabonament -> czy_abonament.
+    double getPrice(int a, int b, int c, int d, Client client, int ilosc) {
+
+        boolean czy_abonament = client.isSubscription();
 
         if (a == 0 && b == 0 && c == 0 && d == 0) {
-            return (double) 0; // Jestem w 99% przekonany ze nie trzeba tutaj castować wszystkiego na double.
-                               // To się scastuje automatycznie.
+            return (double) 0;
         } else if (c == 0 && d == 0) {
-            if (czyabonament) {
+            if (czy_abonament) {
                 return (double) b;
             } else {
                 return (double) a;
@@ -109,13 +87,13 @@ class PriceListValue {
             }
         } else {
             if (ilosc > c) {
-                if (czyabonament) {
-                    return (double) Math.min(b, d); // Tylko tutaj ten cast może być wymagany.
+                if (czy_abonament) {
+                    return (double) Math.min(b, d);
                 } else {
                     return (double) b;
                 }
             } else {
-                if (czyabonament) {
+                if (czy_abonament) {
                     return (double) d;
                 } else {
                     return (double) a;

@@ -91,6 +91,8 @@ public class VODTest {
         // Kinoman
         System.out.println("Progamy obyczajowe w koszyku klienta Kinoman kosztowały:  " + price(koszykKinomana, DRAMA));
 
+        System.out.println();
+
         // Klient zapłaci...
         kinoman.pay(CARD, false); // płaci kartą płatniczą, prowizja 1%
         // true oznacza, że w przypadku braku środków aplikacja sam odłoży nadmiarowe
@@ -100,11 +102,13 @@ public class VODTest {
         // Ile klientowi Kinoman zostało pieniędzy?
         System.out.println("Po zapłaceniu, klientowi Kinoman zostało: " + kinoman.getWallet() + " zł");
 
+        System.out.println();
         // Mogło klientowi zabraknąć srodków, wtedy opcjonalnie programy mogą być
         // odkładane,
         // wpp. koszyk jest pusty po zapłaceniu
         System.out.println("Po zapłaceniu, koszyk klienta " + kinoman.getBasket());
         System.out.println("Po zapłaceniu, koszyk klienta " + koszykKinomana);
+        System.out.println();
 
         // Teraz przychodzi klient Krytyk,
         // deklaruje 60 zł na zamówienia
@@ -122,6 +126,7 @@ public class VODTest {
 
         // Co jest na liście życzeń klienta Krytyk
         System.out.println("Po przepakowaniu, lista życzeń klienta " + krytyk.getWishlist());
+        System.out.println();
 
         // A co jest w koszyku klienta Krytyk
         System.out.println("Po przepakowaniu, koszyk klienta " + krytyk.getBasket());
