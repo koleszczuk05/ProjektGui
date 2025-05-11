@@ -1,4 +1,4 @@
-package ProjektGUI;// import...
+package ProjektGUI;
 
 import java.util.LinkedList;
 
@@ -136,6 +136,7 @@ public class VODTest {
 
         // Ile klientowi Krytyk zostało pieniędzy?
         System.out.println("Po zapłaceniu, klientowi Krytyk zostało: " + krytyk.getWallet() + " zł");
+        System.out.println();
 
         // Co zostało w koszyku klienta Krytyk (za mało pieniędzy miał)
         System.out.println("Po zapłaceniu, koszyk klienta " + koszykKrytyka);
@@ -145,6 +146,7 @@ public class VODTest {
 
         // Ile klientowi krytyk zostało pieniędzy?
         System.out.println("Po zwrocie, klientowi krytyk zostało: " + krytyk.getWallet() + " zł");
+        System.out.println();
 
         // Co zostało w koszyku klienta krytyk
         System.out.println("Po zwrocie, koszyk klienta " + koszykKrytyka);

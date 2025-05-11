@@ -72,7 +72,6 @@ public class Client {
 
         double cena = 0;
         for (int i = 0; i < temp1.size(); ++i) {
-            //hash set optymalizuje
             Produkt akt = temp1.get(i);
             if (genre == akt.genre && name.equals(akt.title)) {
                 double x = value.getPrice(value.brak_abonamentu_mniej_prog, value.brak_abonamentu_wiecej_prog, value.prog_urzadzen, value.ma_abonament, this, akt.ile) * akt.ile;
@@ -160,112 +159,6 @@ public class Client {
 
 }
 
-// Klasa Wishlist i Basket robia dokładnie to samo. To powinno być wydzielone do
-// klasy abstrakcyjnej typu ProductList czy cos
-
-/*
- * 1) Klasa WishList i Basket robią dokładnie to samo. Lepiej by było zrobić
- * klase abstrakcyjną typu ProductSet, w której będzie cała funkcjonalność
- * remove, add itp.
- * 2) Naprawde nalegam zeby LinkedLista zmieniła się w HashSet. Wtedy uprości
- * sie bardzo kod w returnVOD i wszystko będzie o 2 rzędy wielkości szybsze.
- * 3) Wishlist i Basket i ich nadklasa abstrakcyjna powinny byc w innym pliku a
- * nie w kliencie.
- */
-
-class Wishlist {
-    Client client;
-    boolean empty = false;
-    private LinkedList<Produkt> lista_zyczen = new LinkedList<Produkt>();
-
-    Wishlist(Client client) {
-        this.client = client;
-    }
-
-    Produkt remove(Produkt produkt) {
-        for (int i = 0; i < lista_zyczen.size(); i++) {
-            Produkt temp = lista_zyczen.get(i);
-            if (temp.title.equals(produkt.title) && produkt.genre == temp.genre) {
-                return lista_zyczen.remove(i);
-            }
-        }
-        return null;
-    }
-
-    void add(Produkt produkt) {
-        lista_zyczen.add(produkt);
-    }
-
-    public LinkedList<Produkt> getListaZyczen() {
-        return lista_zyczen;
-    }
-
-    @Override
-    public String toString() {
-        String temp = client.name;
-        if (empty || lista_zyczen.size()==0) {
-            temp += " --- pusto";
-            return temp;
-        }
-        temp += "\n";
-        for (int i = 0; i < lista_zyczen.size(); i++) {
-            temp += lista_zyczen.get(i).toString() + "\n";
-        }
-        return temp;
-    }
-}
-
-class Basket {
-    Client client;
-    boolean empty = false;
-    private LinkedList<Produkt> koszykowa_lista = new LinkedList<Produkt>();
-    private LinkedList<Produkt> pozaplaceniu = new LinkedList<Produkt>(); // snake_case
-
-    public Basket(Client client) {
-        this.client = client;
-    }
-
-    public LinkedList<Produkt> getPozaplaceniu() {
-        return pozaplaceniu;
-    }
-
-    Produkt remove(Film film) {
-        for (int i = 0; i < koszykowa_lista.size(); i++) {
-            if (koszykowa_lista.get(i).title.equals(film.title)) {
-                return koszykowa_lista.remove(i);
-            }
-        }
-        return null;
-    }
-
-    void add(Produkt produkt) {
-        koszykowa_lista.add(produkt);
-    }
-
-    public LinkedList<Produkt> getKoszykowa_lista() { // camelCase
-        return koszykowa_lista;
-    }
-
-    public String toString() {
-        String temp = client.name;
-        if (!pozaplaceniu.isEmpty()) {
-            temp += "\n";
-            for (int i = 0; i < pozaplaceniu.size(); i++) {
-                temp += pozaplaceniu.get(i).toString() + "\n";
-            }
-            return temp;
-        }
-        if (empty) {
-            temp += " --- pusto";
-            return temp;
-        }
-        temp += "\n";
-        for (int i = 0; i < koszykowa_lista.size(); i++) {
-            temp += koszykowa_lista.get(i).toString() + "\n";
-        }
-        return temp;
-    }
-}
 
 class Produkt {
     GENRE genre;
@@ -294,5 +187,96 @@ class Produkt {
                 ret += title + ", typ: komedia, ile: " + ile + " urzadzenia, cena " + (price == null ? "brak" : price);
         }
         return ret;
+    }
+}
+
+
+abstract class ProductList {
+    Client client;
+    boolean empty = false;
+    protected LinkedList<Produkt> products = new LinkedList<>();
+
+    ProductList(Client client) {
+        this.client = client;
+    }
+
+    void add(Produkt produkt) {
+        products.add(produkt);
+    }
+
+    Produkt removeByTitleAndGenre(String title, GENRE genre) {
+        for (int i = 0; i < products.size(); i++) {
+            Produkt temp = products.get(i);
+            if (temp.title.equals(title) && temp.genre == genre) {
+                return products.remove(i);
+            }
+        }
+        return null;
+    }
+
+    LinkedList<Produkt> getProducts() {
+        return products;
+    }
+
+    public String toString() {
+        String temp = client.name;
+        if (empty || products.isEmpty()) {
+            temp += " --- pusto";
+        } else {
+            temp += "\n";
+            for (Produkt produkt : products) {
+                temp += produkt.toString() + "\n";
+            }
+        }
+        return temp;
+    }
+}
+
+class Wishlist extends ProductList {
+
+    Wishlist(Client client) {
+        super(client);
+    }
+
+    Produkt remove(Produkt produkt) {
+        return removeByTitleAndGenre(produkt.title, produkt.genre);
+    }
+
+    public LinkedList<Produkt> getListaZyczen() {
+        return getProducts();
+    }
+}
+
+
+class Basket extends ProductList {
+    private LinkedList<Produkt> pozaplaceniu = new LinkedList<>();
+
+    Basket(Client client) {
+        super(client);
+    }
+
+    Produkt remove(Film film) {
+        return removeByTitleAndGenre(film.title, film.genre);
+    }
+
+    LinkedList<Produkt> getKoszykowa_lista() {
+        return getProducts();
+    }
+
+    LinkedList<Produkt> getPozaplaceniu() {
+        return pozaplaceniu;
+    }
+
+    @Override
+    public String toString() {
+        String temp = client.name;
+        if (!pozaplaceniu.isEmpty()) {
+            temp += "\n";
+            for (Produkt produkt : pozaplaceniu) {
+                temp += produkt.toString() + "\n";
+            }
+            return temp;
+        }
+        return super.toString();
     }
 }
